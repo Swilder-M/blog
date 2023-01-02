@@ -21,3 +21,4 @@ hugo -d public
 ## Resources
 - [Hugo](https://gohugo.io/)
 - [Theme](https://github.com/varkai/hugo-theme-zozo)
+- [Theme](https://github.com/Freelander/Blog-Hugo)
