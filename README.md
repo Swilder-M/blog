@@ -1,20 +1,15 @@
-# Blog of [ming](https://codming.com/)
+# Blog
 
-## Create a new post
+## Usage
 
 ```bash
+# create a new post
 hugo new posts/hello-blog.md
-```
 
-## Preview the site
-
-```bash
+# preview the site
 hugo server --port=3000 -D
-```
 
-## Build the site
-
-```bash
+# build the site
 hugo -d public
 ```
 
