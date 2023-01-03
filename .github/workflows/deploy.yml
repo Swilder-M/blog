@@ -1,0 +1,38 @@
+name: Deploy
+
+concurrency: 
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  - push
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: install hugo
+      uses: peaceiris/actions-hugo@v2
+      with:
+        hugo-version: '0.109.0'
+
+    - name: build web
+      run: |
+        hugo -d public --minify
+
+    - name: upload oss
+      run: |
+        wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
+        chmod 755 ./ossutil64
+        ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_ACCESSKEY_ID }} -k ${{ secrets.ALI_ACCESSKEY_SECRET }} -L CH
+        ./ossutil64 cp -r public/ oss://codming-com-blog/ -u
+
+    - name: flush cdn
+      run: |
+        wget https://aliyuncli.alicdn.com/aliyun-cli-linux-3.0.64-amd64.tgz
+        tar -zxvf aliyun-cli-linux-3.0.64-amd64.tgz
+        cp aliyun /usr/local/bin/
+        aliyun configure set --profile default --mode AK --region cn-hangzhou --access-key-id ${{ secrets.ALI_ACCESSKEY_ID }} --access-key-secret ${{ secrets.ALI_ACCESSKEY_SECRET }}
+        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/posts/'

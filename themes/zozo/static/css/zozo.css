@@ -166,6 +166,7 @@ hr {
   font-weight: normal !important;
   float: none !important;
   text-align: right;
+  font-style: italic;
 }
 
 .header .my_socials {
