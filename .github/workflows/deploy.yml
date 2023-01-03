@@ -35,4 +35,4 @@ jobs:
         tar -zxvf aliyun-cli-linux-3.0.64-amd64.tgz
         cp aliyun /usr/local/bin/
         aliyun configure set --profile default --mode AK --region cn-hangzhou --access-key-id ${{ secrets.ALI_ACCESSKEY_ID }} --access-key-secret ${{ secrets.ALI_ACCESSKEY_SECRET }}
-        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/posts/'
+        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/'
