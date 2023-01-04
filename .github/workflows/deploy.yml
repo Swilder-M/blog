@@ -43,6 +43,7 @@ jobs:
         for file in $modified_files; do
           if [[ $file == content/images/* ]]; then
             url="https://codming.com/${file#content/}"
+            echo $url
             aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath $url
           fi
         done
