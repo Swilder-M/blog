@@ -39,6 +39,8 @@ jobs:
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/tags/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/page/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/'
+        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/sitemap.xml'
+        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/index.xml'
         modified_files=$(git diff --name-only HEAD)
         for file in $modified_files; do
           if [[ $file == content/images/* ]]; then
