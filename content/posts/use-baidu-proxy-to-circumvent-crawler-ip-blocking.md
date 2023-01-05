@@ -23,7 +23,7 @@ import requests
 
 def send_request_via_proxy(*args, **kwargs):
     baidu_proxy = 'cloudnproxy.baidu.com:443'
-    proxies = {'http': baidu_proxy, 'https': baidu_proxy}
+    kwargs['proxies'] = {'http': baidu_proxy, 'https': baidu_proxy}
     if 'headers' not in kwargs:
         kwargs['headers'] = {}
     if 'User-Agent' not in kwargs['headers']:
@@ -32,7 +32,6 @@ def send_request_via_proxy(*args, **kwargs):
 
     kwargs['headers']['User-Agent'] += ' baiduboxapp/13.10.0.10'
     # kwargs['headers']['X-T5-Auth'] = '196289709'
-    kwargs['proxies'] = proxies
     resp = requests.request(*args, **kwargs)
     return resp
 
