@@ -27,8 +27,8 @@ def send_request_via_proxy(*args, **kwargs):
     if 'headers' not in kwargs:
         kwargs['headers'] = {}
     if 'User-Agent' not in kwargs['headers']:
-        kwargs['headers']['User-Agent'] = 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 ' \
-                                          '(KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36'
+        kwargs['headers']['User-Agent'] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 ' \
+                                          '(KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
 
     kwargs['headers']['User-Agent'] += ' baiduboxapp/13.10.0.10'
     # kwargs['headers']['X-T5-Auth'] = '196289709'
