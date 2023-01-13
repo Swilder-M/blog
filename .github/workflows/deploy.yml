@@ -65,6 +65,7 @@ jobs:
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/posts/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/tags/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/page/'
+        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/games/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/sitemap.xml'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/index.xml'
