@@ -123,6 +123,11 @@ def sort_trophy_titles(trophys):
 
 
 def output_trophy_titles(trophys):
+    print('---')
+    print('title: "Playstation Games"')
+    print(f'date: {datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")}')
+    print('draft: false')
+    print('---')
     print()
     print('| Name | Platform | Platinum | Gold | Silver | Bronze | Progress |')
     print('|:---- |:--------:|:--------:|:----:|:------:|:------:|:--------:|')
@@ -133,8 +138,6 @@ def output_trophy_titles(trophys):
             print(f"`{_t['earnedTrophies'][_k]}/{_t['definedTrophies'][_k]}`", end=' | ')
         print(f"`{_t['earnedTrophiesTotal']}/{_t['definedTrophiesTotal']}`", end=' |')
         print()
-
-    print('\n> Last updated:', datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
 
 
 def update_github_repo_secret(secret_records):

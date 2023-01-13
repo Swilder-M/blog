@@ -42,7 +42,7 @@ jobs:
       run: |
         output=$(python3 .github/scripts/psn.py)
         if [ $? -eq 0 ]; then
-          echo "$output" >> content/games/index.md
+          echo "$output" > content/games/index.md
         fi
 
     - name: build web
