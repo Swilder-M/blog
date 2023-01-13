@@ -5,7 +5,12 @@ concurrency:
   cancel-in-progress: true
 
 on:
-  - push
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 23 * * *'
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -17,6 +22,28 @@ jobs:
       uses: peaceiris/actions-hugo@v2
       with:
         hugo-version: '0.109.0'
+
+    - name: install python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.9'
+
+    - name: install python packages
+      run: |
+        pip3 install requests
+        pip3 install pynacl
+
+    - name: update games list
+      env:
+        NPSSO: ${{ secrets.NPSSO }}
+        PSN_ACCESS_TOKEN: ${{ secrets.PSN_ACCESS_TOKEN }}
+        PSN_REFRESH_TOKEN: ${{ secrets.PSN_REFRESH_TOKEN }}
+        CI_TOKEN: ${{ secrets.CI_TOKEN }}
+      run: |
+        output=$(python3 .github/scripts/psn.py)
+        if [ $? -eq 0 ]; then
+          echo "$output" > content/games/index.md
+        fi
 
     - name: build web
       run: |

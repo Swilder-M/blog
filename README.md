@@ -17,3 +17,4 @@ hugo -d public
 - [Hugo](https://gohugo.io/)
 - [Theme](https://github.com/varkai/hugo-theme-zozo)
 - [Theme](https://github.com/Freelander/Blog-Hugo)
+- [PSN API](https://andshrew.github.io/PlayStation-Trophies/#/APIv2)
