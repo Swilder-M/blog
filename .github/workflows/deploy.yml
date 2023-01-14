@@ -62,10 +62,7 @@ jobs:
         tar -zxvf aliyun-cli-linux-3.0.64-amd64.tgz
         cp aliyun /usr/local/bin/
         aliyun configure set --profile default --mode AK --region cn-hangzhou --access-key-id ${{ secrets.ALI_ACCESSKEY_ID }} --access-key-secret ${{ secrets.ALI_ACCESSKEY_SECRET }}
-        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/posts/'
-        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/tags/'
-        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/page/'
-        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Directory --ObjectPath 'https://codming.com/games/'
+        aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType Regex --ObjectPath 'https://codming.com/([0-9a-z^/]|.)/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/sitemap.xml'
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectType File --ObjectPath 'https://codming.com/index.xml'

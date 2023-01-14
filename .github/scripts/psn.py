@@ -168,9 +168,9 @@ if __name__ == '__main__':
         psn_access_token, psn_refresh_token = refresh_psn_token()
         if not psn_access_token:
             psn_access_token, psn_refresh_token = get_psn_token()
-    update_github_repo_secret({
-        'PSN_ACCESS_TOKEN': psn_access_token,
-        'PSN_REFRESH_TOKEN': psn_refresh_token
-    })
+        update_github_repo_secret({
+            'PSN_ACCESS_TOKEN': psn_access_token,
+            'PSN_REFRESH_TOKEN': psn_refresh_token
+        })
     trophys = sort_trophy_titles(get_trophy_titles())
     output_trophy_titles(trophys)
