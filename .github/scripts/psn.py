@@ -96,7 +96,7 @@ def cov_play_duration(duration_str):
     return duration_str.strip()
 
 
-def draw_progress_bar(percent, bar_length=20):
+def draw_progress_bar(percent, bar_length=10):
     filled_length = int(bar_length * percent / 100)  # 已经填充的长度
     remaining_length = bar_length - filled_length  # 剩余长度
 
@@ -214,7 +214,6 @@ def output_games(game_list):
         trophies = [_g['earnedTrophies'][_k] for _k in ['platinum', 'gold', 'silver', 'bronze']]
         # print(' / '.join([str(_t) for _t in trophies]), '|', f"{_g['progress']:.2f}%", '|')
         print(' / '.join([str(_t) for _t in trophies]), '|', draw_progress_bar(_g['progress']), '|')
-        print()
 
 
 def update_github_repo_secret(secret_records):
