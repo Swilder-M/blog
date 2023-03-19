@@ -83,7 +83,42 @@ def check_psn_token():
     return True
 
 
-def get_trophy_titles(offset=0, limit=800):
+def cov_play_duration(duration_str):
+    # PT3M8S -> 3 mins
+    # PT184H1M8S -> 184 hrs 1 min
+    # PT0S -> 0 mins
+    if not duration_str:
+        return '0 mins'
+    duration_str = duration_str.replace('PT', '')
+    duration_str = duration_str.replace('M', ' mins')
+    duration_str = duration_str.replace('H', ' hrs ')
+    duration_str = duration_str.split('mins')[0] + 'mins'
+    return duration_str.strip()
+
+
+def draw_progress_bar(percent, bar_length=20):
+    filled_length = int(bar_length * percent / 100)  # 已经填充的长度
+    remaining_length = bar_length - filled_length  # 剩余长度
+
+    # 根据已填充和剩余的长度，构造进度条的字符画
+    bar = '█' * filled_length + '░' * remaining_length
+
+    # 根据已填充的长度，确定进度条末尾的字符
+    if filled_length == 0:
+        end_char = '░'
+    elif filled_length == bar_length:
+        end_char = '█'
+    else:
+        end_char_index = int((filled_length % 1) * 8)
+        end_char = '▏▎▍▌▋▊▉█'[end_char_index]
+
+    # 在进度条末尾添加结束字符
+    bar += end_char
+
+    return bar
+
+
+def get_trophy_list(offset=0, limit=800):
     url = 'https://m.np.playstation.com/api/trophy/v1/users/me/trophyTitles'
     headers = {
         'Authorization': f'Bearer {psn_access_token}',
@@ -101,8 +136,48 @@ def get_trophy_titles(offset=0, limit=800):
     trophy_titles = resp['trophyTitles']
     next_offset = resp.get('nextOffset')
     if next_offset:
-        trophy_titles += get_trophy_titles(next_offset)
+        trophy_titles += get_trophy_list(next_offset)
     return trophy_titles
+
+
+def get_specific_title_trophy_list(title_id):
+    url = 'https://m.np.playstation.com/api/trophy/v1/users/me/titles/trophyTitles'
+    headers = {
+        'Authorization': f'Bearer {psn_access_token}',
+        'Content-Type': 'application/json'
+    }
+    params = {
+        'accountId': 'me',
+        'npTitleIds': title_id
+    }
+    resp = requests.get(url, headers=headers, params=params)
+    if resp.status_code != 200:
+        return None
+
+    resp = resp.json()
+    for title in resp['titles']:
+        if title['npTitleId'] == title_id and title['trophyTitles']:
+            return title['trophyTitles'][0]
+    return None
+
+
+def get_game_list(offset=0, limit=250):
+    url = f'https://m.np.playstation.com/api/gamelist/v2/users/me/titles?limit={limit}&offset={offset}'
+    headers = {
+        'Authorization': f'Bearer {psn_access_token}',
+        'Content-Type': 'application/json',
+        # 'Accept-Language': 'zh-CN'  # game name & image
+    }
+    resp = requests.get(url, headers=headers)
+    if resp.status_code != 200:
+        return None
+
+    resp = resp.json()
+    titles = resp['titles']
+    next_offset = resp.get('nextOffset')
+    if next_offset:
+        titles += get_game_list(offset=next_offset)
+    return titles
 
 
 def sort_trophy_titles(trophys):
@@ -116,27 +191,29 @@ def sort_trophy_titles(trophys):
             'earnedTrophies': _t['earnedTrophies'],
             'definedTrophiesTotal': sum(_t['definedTrophies'].values()),
             'earnedTrophiesTotal': sum(_t['earnedTrophies'].values()),
+            'npCommunicationId': _t['npCommunicationId']
         }
         for _t in trophys if _t['progress'] > 0
     ]
     return records
 
 
-def output_trophy_titles(trophys):
+def output_games(game_list):
     print('---')
     print('title: "Playstation Games"')
     print(f'date: {datetime.now().strftime("%Y-%m-%dT%H:%M:%S%z")}')
     print('draft: false')
     print('---')
     print()
-    print('| Name | Platform | Platinum | Gold | Silver | Bronze | Progress |')
-    print('|:---- |:--------:|:--------:|:----:|:------:|:------:|:--------:|')
-    for _t in trophys:
-        # | Ghost of Tsushima | PS5 | `1/1` | `2/4` | `10/13` | `45/59` | `58/77` |
-        print('|', _t['title'].strip(), '|', _t['trophyTitlePlatform'], '|', end=' ')
-        for _k in ['platinum', 'gold', 'silver', 'bronze']:
-            print(f"`{_t['earnedTrophies'][_k]}/{_t['definedTrophies'][_k]}`", end=' | ')
-        print(f"`{_t['earnedTrophiesTotal']}/{_t['definedTrophiesTotal']}`", end=' |')
+
+    print('| Name | Platform | Play Duration | Trophies | Progress |')
+    print('|:---- |:--------:|:-------------:|:--------:|:--------:|')
+    for _g in game_list:
+        # | Ghost of Tsushima | PS5 | 1 hrs 10 mins | 1 2 3 4 | 12.30% |
+        print('|', _g['name'].strip(), '|', _g['platform'].upper(), '|', _g['playDuration'], '|', end=' ')
+        trophies = [_g['earnedTrophies'][_k] for _k in ['platinum', 'gold', 'silver', 'bronze']]
+        # print(' / '.join([str(_t) for _t in trophies]), '|', f"{_g['progress']:.2f}%", '|')
+        print(' / '.join([str(_t) for _t in trophies]), '|', draw_progress_bar(_g['progress']), '|')
         print()
 
 
@@ -172,5 +249,35 @@ if __name__ == '__main__':
             'PSN_ACCESS_TOKEN': psn_access_token,
             'PSN_REFRESH_TOKEN': psn_refresh_token
         })
-    trophys = sort_trophy_titles(get_trophy_titles())
-    output_trophy_titles(trophys)
+
+    all_games = get_game_list()
+    valid_records = []
+    for _g in all_games:
+        play_duration = cov_play_duration(_g.get('playDuration'))
+        if play_duration == '0 mins':
+            continue
+
+        _trophys = get_specific_title_trophy_list(_g['titleId'])
+        if not _trophys:
+            continue
+
+        _record = {
+            'name': _g['name'],
+            'image': _g['imageUrl'],
+            'platform': _g['category'].split('_')[0],
+            'playDuration': play_duration,
+            'definedTrophies': _trophys['definedTrophies'],
+            'earnedTrophies': _trophys['earnedTrophies'],
+            'definedTrophiesTotal': sum(_trophys['definedTrophies'].values()),
+            'earnedTrophiesTotal': sum(_trophys['earnedTrophies'].values()),
+            'titleId': _g['titleId']
+        }
+        _record['progress'] = round(_record['earnedTrophiesTotal'] / _record['definedTrophiesTotal'] * 100, 2)
+        
+        if ' hrs ' not in play_duration and _record['progress'] < 1.00:
+            continue
+
+        valid_records.append(_record)
+
+    valid_records.sort(key=lambda _t: _t['progress'], reverse=True)
+    output_games(valid_records)
