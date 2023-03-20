@@ -206,11 +206,11 @@ def output_games(game_list):
     print('---')
     print()
 
-    print('| Name | Platform | Duration | Trophies | Progress |')
-    print('|:---- |:--------:|:--------:|:--------:|:--------:|')
+    print('| Name | Duration | Trophies | Progress |')
+    print('|:---- |:--------:|:--------:|:--------:|')
     for _g in game_list:
         # | Ghost of Tsushima | PS5 | 1 hrs 10 mins | 1 2 3 4 | 12.30% |
-        print('|', _g['name'].strip(), '|', _g['platform'].upper(), '|', _g['playDuration'], '|', end=' ')
+        print('|', _g['name'].strip(), '|', _g['playDuration'], '|', end=' ')
         trophies = [_g['earnedTrophies'][_k] for _k in ['platinum', 'gold', 'silver', 'bronze']]
         # print(' / '.join([str(_t) for _t in trophies]), '|', f"{_g['progress']:.2f}%", '|')
         print(' / '.join([str(_t) for _t in trophies]), '|', draw_progress_bar(_g['progress']), '|')
