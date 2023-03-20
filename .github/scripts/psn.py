@@ -220,11 +220,11 @@ def output_games(game_list):
     print('---')
     print()
 
-    print('| Name | Duration | Trophies | Progress |')
+    print('| Game | Duration | Trophies | Progress |')
     print('|:---- |:--------:|:--------:|:--------:|')
     for _g in game_list:
         # | <img src="xxx" style="zoom:5%;" />  Ghost of Tsushima | 80 hrs 55 mins  | 1 / 2 / 10 / 45 | ███████░░░▏ |
-        print('|', set_img_html(_g['image']), _g['name'].strip(), '|', _g['playDuration'], '|', end=' ')
+        print('|', set_img_html(_g['image']), '|', _g['playDuration'], '|', end=' ')
         trophies = [_g['earnedTrophies'][_k] for _k in ['platinum', 'gold', 'silver', 'bronze']]
         # print(' / '.join([str(_t) for _t in trophies]), '|', f"{_g['progress']:.2f}%", '|')
         print(' / '.join([str(_t) for _t in trophies]), '|', draw_progress_bar(_g['progress']), '|')
