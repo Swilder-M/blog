@@ -107,7 +107,7 @@ def convert_play_duration(duration_str):
 
 def set_img_html(img_url):
     # <img src="xxx" style="zoom:5%;" />
-    return f'<img src="{img_url}" style="max-width:20%;" />'
+    return f'<img src="{img_url}" style="max-width:60%;" />'
 
 
 def draw_progress_bar(percent, bar_length=10):
@@ -221,7 +221,7 @@ def output_games(game_list):
     print()
 
     print('| Game | Duration | Trophies | Progress |')
-    print('|:---- |:--------:|:--------:|:--------:|')
+    print('|:--------:|:--------:|:--------:|:--------:|')
     for _g in game_list:
         # | <img src="xxx" style="zoom:5%;" />  Ghost of Tsushima | 80 hrs 55 mins  | 1 / 2 / 10 / 45 | ███████░░░▏ |
         print('|', set_img_html(_g['image']), '|', _g['playDuration'], '|', end=' ')
