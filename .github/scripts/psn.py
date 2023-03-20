@@ -83,16 +83,24 @@ def check_psn_token():
     return True
 
 
-def cov_play_duration(duration_str):
-    # PT3M8S -> 3 mins
-    # PT184H1M8S -> 184 hrs 1 min
+def convert_play_duration(duration_str):
     # PT0S -> 0 mins
+    # PT3M8S -> 3 mins
+    # PT9H3S -> 9 hrs
+    # PT184H1M8S -> 184 hrs 1 min
+
     if not duration_str:
         return '0 mins'
     duration_str = duration_str.replace('PT', '')
+    duration_str = duration_str.replace('S', ' secs')
     duration_str = duration_str.replace('M', ' mins')
     duration_str = duration_str.replace('H', ' hrs ')
-    duration_str = duration_str.split('mins')[0] + 'mins'
+    if 'mins' not in duration_str:
+        if 'hrs' not in duration_str:
+            return '0 mins'
+        duration_str = duration_str.split('hrs')[0] + 'hrs'
+    else:
+        duration_str = duration_str.split('mins')[0] + 'mins'
     return duration_str.strip()
 
 
@@ -252,7 +260,7 @@ if __name__ == '__main__':
     all_games = get_game_list()
     valid_records = []
     for _g in all_games:
-        play_duration = cov_play_duration(_g.get('playDuration'))
+        play_duration = convert_play_duration(_g.get('playDuration'))
         if play_duration == '0 mins':
             continue
 
@@ -273,7 +281,7 @@ if __name__ == '__main__':
         }
         _record['progress'] = round(_record['earnedTrophiesTotal'] / _record['definedTrophiesTotal'] * 100, 2)
         
-        if ' hrs ' not in play_duration and _record['progress'] < 1.00:
+        if 'hrs' not in play_duration and _record['progress'] < 1.00:
             continue
 
         valid_records.append(_record)
