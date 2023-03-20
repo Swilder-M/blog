@@ -206,8 +206,8 @@ def output_games(game_list):
     print('---')
     print()
 
-    print('| Name | Platform | Play Duration | Trophies | Progress |')
-    print('|:---- |:--------:|:-------------:|:--------:|:--------:|')
+    print('| Name | Platform | Duration | Trophies | Progress |')
+    print('|:---- |:--------:|:--------:|:--------:|:--------:|')
     for _g in game_list:
         # | Ghost of Tsushima | PS5 | 1 hrs 10 mins | 1 2 3 4 | 12.30% |
         print('|', _g['name'].strip(), '|', _g['platform'].upper(), '|', _g['playDuration'], '|', end=' ')
