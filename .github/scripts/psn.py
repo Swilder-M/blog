@@ -87,13 +87,14 @@ def convert_play_duration(duration_str):
     # PT0S -> 0 mins
     # PT3M8S -> 3 mins
     # PT9H3S -> 9 hrs
+    # PT20H30S -> 20 hrs 30 mins
     # PT184H1M8S -> 184 hrs 1 min
 
     if not duration_str:
         return '0 mins'
     duration_str = duration_str.replace('PT', '')
     duration_str = duration_str.replace('S', ' secs')
-    duration_str = duration_str.replace('M', ' mins')
+    duration_str = duration_str.replace('M', ' mins ')
     duration_str = duration_str.replace('H', ' hrs ')
     if 'mins' not in duration_str:
         if 'hrs' not in duration_str:
