@@ -1,4 +1,4 @@
-import os, json
+import os
 from base64 import b64encode
 from datetime import datetime
 from nacl import encoding, public
@@ -103,6 +103,11 @@ def convert_play_duration(duration_str):
     else:
         duration_str = duration_str.split('mins')[0] + 'mins'
     return duration_str.strip()
+
+
+def set_img_html(img_url):
+    # <img src="xxx" style="zoom:5%;" />
+    return f'<img src="{img_url}" style="zoom:5%;" />'
 
 
 def draw_progress_bar(percent, bar_length=10):
@@ -218,8 +223,8 @@ def output_games(game_list):
     print('| Name | Duration | Trophies | Progress |')
     print('|:---- |:--------:|:--------:|:--------:|')
     for _g in game_list:
-        # | Ghost of Tsushima | PS5 | 1 hrs 10 mins | 1 2 3 4 | 12.30% |
-        print('|', _g['name'].strip(), '|', _g['playDuration'], '|', end=' ')
+        # | <img src="xxx" style="zoom:5%;" />  Ghost of Tsushima | 80 hrs 55 mins  | 1 / 2 / 10 / 45 | ███████░░░▏ |
+        print('|', set_img_html(_g['image']), _g['name'].strip(), '|', _g['playDuration'], '|', end=' ')
         trophies = [_g['earnedTrophies'][_k] for _k in ['platinum', 'gold', 'silver', 'bronze']]
         # print(' / '.join([str(_t) for _t in trophies]), '|', f"{_g['progress']:.2f}%", '|')
         print(' / '.join([str(_t) for _t in trophies]), '|', draw_progress_bar(_g['progress']), '|')
