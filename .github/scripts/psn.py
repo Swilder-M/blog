@@ -107,7 +107,7 @@ def convert_play_duration(duration_str):
 
 def set_img_html(img_url):
     # <img src="xxx" style="zoom:5%;" />
-    return f'<img src="{img_url}" style="zoom:5%;" />'
+    return f'<img src="{img_url}" style="max-width:20%;" />'
 
 
 def draw_progress_bar(percent, bar_length=10):
