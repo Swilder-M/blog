@@ -36,11 +36,6 @@ pygmentscodefencesguesssyntax = true
   identifier = "tags"
   url = "/tags/"
 [[menu.main]]
-  name = "Games"
-  weight = 40
-  identifier = "games"
-  url = "/games/"
-[[menu.main]]
   name = "About"
   weight = 50
   identifier = "about"
