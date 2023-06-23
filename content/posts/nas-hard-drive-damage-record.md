@@ -4,7 +4,7 @@ date: 2023-06-23T07:30:01+08:00
 tags: ["Nas"]
 keywords: ["Nas", "硬盘", "维修", "数码"]
 description: "为 Nas 升级硬盘遇到损坏的情况，记录下整个处理过程"
-draft: true
+draft: false
 ---
 
 我目前在使用的 Nas 产品是 Synology DS920+，跟随机器一起购买的是希捷的 4 块 4TB 机械硬盘，组成 SHR RAID。我在 Nas 上主要是存放影视剧，以及手机相册的备份，还有 macOS 的 Time Machine 备份。用了一年时间左右，16TB 的空间已经快用完了，所以我决定升级硬盘，将原有的 4TB 硬盘换成 8TB 硬盘。
