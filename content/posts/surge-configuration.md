@@ -4,7 +4,7 @@ date: 2023-01-31T15:16:22+08:00
 tags: ["Surge", "工具"]
 keywords: ["Surge", "代理", '网络']
 description: "使用 Surge 作为代理工具，可以让你的网络访问更加稳定，本文将分享我的 Surge 配置文件。"
-draft: false
+draft: true
 ---
 
 如果你平时使用的设备是 Mac 和 iPhone 的话，我比较推荐使用 [Surge](https://nssurge.com/) 来优化你的网络访问，
