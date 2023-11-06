@@ -35,7 +35,9 @@ draft: false
 你可以在用户资料里修改个人信息，或者绑定手机号或者验证器，以增强账户安全性。
 
 ## 后续的处理
-每个订阅最多可以添加 10 个邮箱地址，如果你不需要再增加邮箱，或者名额已经用完，可以取消订阅，前往 Microsoft 订阅页面 <https://account.microsoft.com/services?fref=home.drawers.subscriptions.view-all-subscriptions>，即可取消自动续费，或者直接停止服务，停止服务后订阅费用会退给你:，或者可以等订阅到期，你的 `@msn.com` 邮件地址依旧会保留，你可以继续免费使用它。
+每个订阅最多可以添加 10 个邮箱地址，如果你不需要再增加邮箱，或者名额已经用完，可以取消订阅，前往 Microsoft 订阅页面 <https://account.microsoft.com/services?fref=home.drawers.subscriptions.view-all-subscriptions>，取消自动续费，或者直接停止服务，停止服务后订阅费用会退给你。
+
+订阅取消或者到期后，`@msn.com` 邮件地址依旧会保留，你可以继续免费使用它。
 
 ![订阅管理](https://static.codming.com/img/202309121800023.png)
 
