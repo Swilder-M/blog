@@ -47,7 +47,5 @@ draft: false
 
 今天早上看到 Hostloc 有网友发帖分享，直接抄袭了我的博客，经过沟通，他删除了帖子也跟我道歉，这里我希望大家在转载我的文章时，能够注明出处，谢谢各位。
 
-![道歉截图](https://static.codming.com/img/202311061059043.png)
-
 ## 参考链接
 - <https://www.reddit.com/r/techsupport/comments/crhewo/comment/iv71nj0/>
