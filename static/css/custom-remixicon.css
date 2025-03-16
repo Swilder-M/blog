@@ -1,0 +1,32 @@
+@font-face {
+  font-family: "RemixIcon";
+  src: url('../fonts/custom-remixicon.woff2') format('woff2');
+  font-display: swap;
+}
+
+[class^="ri-"], [class*="ri-"] {
+  font-family: 'RemixIcon' !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ri-menu-line:before { content: "\ef3e"; }
+.ri-stack-line:before { content: "\f181"; }
+.ri-arrow-up-s-line:before { content: "\ea78"; }
+.ri-map-pin-time-line:before { content: "\ef18"; }
+.ri-rss-fill:before { content: "\f09e"; }
+.ri-github-fill:before { content: "\edca"; }
+.ri-twitter-fill:before { content: "\f23a"; }
+
+/* Common styles for icons */
+i[class^="ri-"], i[class*=" ri-"] {
+  display: inline-block;
+  font-family: 'RemixIcon' !important;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  vertical-align: -.125em;
+} 
