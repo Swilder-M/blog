@@ -40,12 +40,6 @@ $ git clone https://github.com/varkai/hugo-theme-zozo themes/zozo
 {{< img src="path/to/xxx.png" >}}
 ```
 
-## Math 公式
-
-本主题支持 MathJax 数学公式，默认为关闭状态，如需使用，需要在 [`config.toml`](./exampleSite/config.toml) 中进行设置。
-
-设置 `[params]` 下的 `mathjax = true` 来支持数学公式。
-
 ## Valine 评论
 
 本主题提供了 Valine 评论系统，默认为关闭状态，如需使用，需要在 [`config.toml`](./exampleSite/config.toml) 中进行设置。
@@ -76,3 +70,13 @@ Released under the [MIT](https://github.com/varkai/hugo-theme-zozo/blob/master/L
 - [Aragaki](https://github.com/PCDotFan/Aragaki)
 - [菩提树下](https://blog.caicai.me/)
 - [olOwOlo](https://olowolo.com/)
+
+## 特色
+
++ **响应式**
++ **代码高亮**
++ **社交链接**
++ **自定义目录样式同步滚动**
++ **支持Valine评论系统**
++ **支持Fancybox**
++ **支持 Google Analytics**
