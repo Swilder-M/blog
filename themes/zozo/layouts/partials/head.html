@@ -35,9 +35,12 @@
     
     <link rel="shortcut icon" href="{{ "images/favicon.ico" | absURL }}" />
 
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ .Site.BaseURL }}css/normalize.css" />
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ "css/normalize.css" | absURL }}" />
     <link rel="stylesheet" type="text/css" media="screen" href="{{ "css/zozo.css" |absURL }}" />
-    <link rel="stylesheet" type="text/css" media="screen" href="{{ "css/remixicon.css" | absURL }}" />
+    {{/* Remove or comment out the original remixicon.css */}}
+    {{/* <link rel="stylesheet" type="text/css" media="screen" href="{{ "css/remixicon.css" | absURL }}" /> */}}
+    {{/* Add the custom remixicon css with only the icons we need */}}
+    <link rel="stylesheet" type="text/css" media="screen" href="{{ "css/custom-remixicon.css" | absURL }}" />
     <link rel="stylesheet" type="text/css" media="screen" href="{{ "css/highlight.css" | absURL }}" />
 
     <!-- custom css -->
