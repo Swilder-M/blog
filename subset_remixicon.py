@@ -18,7 +18,7 @@ icons_unicodes = [
     0xef18,  # map-pin-time-line
     0xf09e,  # rss-fill
     0xedca,  # github-fill
-    0xf23a,  # twitter-fill
+    0xf3e6,  # twitter-x-fill
 ]
 
 # Convert to strings that fonttools can use
