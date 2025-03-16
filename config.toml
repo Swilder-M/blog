@@ -7,7 +7,6 @@ hasCJKLanguage = true                  # has chinese/japanese/korean ?  # 自动
 summaryLength = 100
 paginate = 4                           # shows the number of articles   # 首页显示文章数量
 enableEmoji = true
-disqusShortname = ""                   # your discuss shortname         # Disqus评论系统代码
 
 pygmentsUseClasses = true
 pygmentCodeFences = true
@@ -49,16 +48,6 @@ pygmentscodefencesguesssyntax = true
   mainSections = ["posts","post"]
   fancybox = true
   customCSS = ["disable-animations.css"]                          # 禁用页面切换动画效果的CSS
-
-# Valine.
-# You can get your appid and appkey from https://leancloud.cn
-# more info please open https://valine.js.org
-[params.valine]
-  enable = false
-  appId = ""
-  appKey = ""
-  placeholder = " "
-  visitor = true
 
 [social]
   github = "https://github.com/Swilder-M"
