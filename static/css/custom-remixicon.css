@@ -17,7 +17,7 @@
 .ri-map-pin-time-line:before { content: "\ef18"; }
 .ri-rss-fill:before { content: "\f09e"; }
 .ri-github-fill:before { content: "\edca"; }
-.ri-twitter-fill:before { content: "\f23a"; }
+.ri-twitter-x-fill:before { content: "\f3e6"; }
 
 /* Common styles for icons */
 i[class^="ri-"], i[class*=" ri-"] {

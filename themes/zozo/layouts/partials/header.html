@@ -12,7 +12,11 @@
             <div class="my_socials">
                 {{ range $key, $val := .Site.Social }}
                 {{ if ne $val "" }}
+                {{ if eq $key "twitter" }}
+                <a href="{{ $val }}" title="{{ $key }}" target="_blank"><i class="ri-twitter-x-fill"></i></a>
+                {{ else }}
                 <a href="{{ $val }}" title="{{ $key }}" target="_blank"><i class="ri-{{ $key }}-fill"></i></a>
+                {{ end }}
                 {{ end }}
                 {{ end }}
                 <a href="{{ .Site.BaseURL }}index.xml" type="application/rss+xml" title="rss" target="_blank"><i
