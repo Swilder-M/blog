@@ -2,9 +2,3 @@
 <link href="{{ "css/fancybox.min.css" | absURL }}" rel="stylesheet">
 <script src="{{ "js/fancybox.min.js" | absURL }}"></script>
 <script src="{{ "js/zozo.js" | absURL }}"></script>
-
-{{ if .Site.Params.enableMathJax }}
-{{ partial "mathjax.html" . }}
-{{ end }}
-
-{{ template "_internal/google_analytics_async.html" . }}

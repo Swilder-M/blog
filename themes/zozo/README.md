@@ -10,11 +10,9 @@ A simple and beautiful theme for Hugo
 
 + **Responsive**
 + **Syntax highlighting with highlightjs**
-+ **Math with mathjax** 
-+ **Social links(Customize)**
-+ **Tags page**
-+ **Archive page**
-+ **Disqus and [Valine](https://valine.js.org/en/index.html) comment-system**
++ **Social links(GitHub, Twitter, Facebook etc.)**
++ **Custom TOC(Table of Contents) style**
++ **valine comment-system**
 + **Fancybox**
 + **GoogleAnalytics**
 
@@ -47,12 +45,6 @@ This theme provides `img` shortcodes.
 ```markdown
 {{< img src="path/to/xxx.png" >}}
 ```
-
-## MathJax
-
-This theme supports MathJax, which are turned off by default. If you want to use them, you need to set them in `config.toml`.
-
-Set `mathjax = true` under the `[params]` to support the MathJax.
 
 ## Valine Comment System
 
