@@ -48,6 +48,7 @@ pygmentscodefencesguesssyntax = true
   enableSummary = true                                            # display the article summary  # 是否显示文章摘要
   mainSections = ["posts","post"]
   fancybox = true
+  customCSS = ["disable-animations.css"]                          # 禁用页面切换动画效果的CSS
 
 # Valine.
 # You can get your appid and appkey from https://leancloud.cn

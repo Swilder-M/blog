@@ -1,0 +1,14 @@
+/* 禁用动画效果 */
+.animate__animated {
+  animation-duration: 0s !important;
+  -webkit-animation-duration: 0s !important;
+  transition-duration: 0s !important;
+  -webkit-transition-duration: 0s !important;
+}
+
+/* 具体禁用淡入效果 */
+.animate__fadeInDown {
+  opacity: 1 !important;
+  transform: none !important;
+  -webkit-transform: none !important;
+} 
