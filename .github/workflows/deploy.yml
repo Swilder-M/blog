@@ -12,9 +12,9 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: install hugo
       uses: peaceiris/actions-hugo@v2
@@ -27,14 +27,14 @@ jobs:
 
     - name: upload oss
       run: |
-        wget http://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
+        curl -s -o ossutil64 https://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
         chmod 755 ./ossutil64
         ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_ACCESSKEY_ID }} -k ${{ secrets.ALI_ACCESSKEY_SECRET }} -L CH
         ./ossutil64 cp -r public/ oss://codming-com-blog/ -u
 
     - name: flush cdn
       run: |
-        wget https://aliyuncli.alicdn.com/aliyun-cli-linux-3.0.64-amd64.tgz
+        curl -s -o aliyun-cli-linux-3.0.64-amd64.tgz https://aliyuncli.alicdn.com/aliyun-cli-linux-3.0.64-amd64.tgz
         tar -zxvf aliyun-cli-linux-3.0.64-amd64.tgz
         cp aliyun /usr/local/bin/
         aliyun configure set --profile default --mode AK --region cn-hangzhou --access-key-id ${{ secrets.ALI_ACCESSKEY_ID }} --access-key-secret ${{ secrets.ALI_ACCESSKEY_SECRET }}

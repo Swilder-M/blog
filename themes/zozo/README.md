@@ -18,10 +18,6 @@ A simple and beautiful theme for Hugo
 
 [Demo](https://zozo.varkai.com) | [中文说明](./README-zh.md)
 
-## Sceenshots
-
-![zozo](./images/showcase.png)
-
 ## Installation
 
 ```bash
