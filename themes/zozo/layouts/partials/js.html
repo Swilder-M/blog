@@ -1,4 +1,6 @@
 <script src="{{ "js/jquery-3.5.1.min.js" | absURL }}"></script>
+{{ if .Site.Params.fancybox }}
 <link href="{{ "css/fancybox.min.css" | absURL }}" rel="stylesheet">
 <script src="{{ "js/fancybox.min.js" | absURL }}"></script>
+{{ end }}
 <script src="{{ "js/zozo.js" | absURL }}"></script>
