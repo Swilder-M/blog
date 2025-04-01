@@ -27,17 +27,18 @@ jobs:
 
     - name: upload oss
       run: |
-        curl -s -o ossutil64 https://gosspublic.alicdn.com/ossutil/1.7.8/ossutil64
-        chmod 755 ./ossutil64
-        ./ossutil64 config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_ACCESSKEY_ID }} -k ${{ secrets.ALI_ACCESSKEY_SECRET }} -L CH
-        ./ossutil64 rm -r -f oss://codming-com-blog/
-        ./ossutil64 cp -r public/ oss://codming-com-blog/ -u
+        curl -s -o ossutil-linux-amd64.zip https://gosspublic.alicdn.com/ossutil/v2/2.1.0/ossutil-2.1.0-linux-amd64.zip
+        unzip ossutil-linux-amd64.zip && mv ossutil-*-linux-amd64 ossutil-linux-amd64
+        chmod 755 ./ossutil-linux-amd64/ossutil
+        ./ossutil-linux-amd64/ossutil config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_ACCESSKEY_ID }} -k ${{ secrets.ALI_ACCESSKEY_SECRET }} -L CH
+        ./ossutil-linux-amd64/ossutil rm -r -f oss://codming-com-blog/
+        ./ossutil-linux-amd64/ossutil cp -r public/ oss://codming-com-blog/ -u
 
     - name: flush cdn
       run: |
-        curl -s -o aliyun-cli-linux-3.0.64-amd64.tgz https://aliyuncli.alicdn.com/aliyun-cli-linux-3.0.64-amd64.tgz
-        tar -zxvf aliyun-cli-linux-3.0.64-amd64.tgz
-        cp aliyun /usr/local/bin/
+        curl -s -o aliyun-cli-linux-amd64.tgz https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
+        tar -zxvf aliyun-cli-linux-amd64.tgz
+        chmod 755 && cp aliyun /usr/local/bin/
         aliyun configure set --profile default --mode AK --region cn-hangzhou --access-key-id ${{ secrets.ALI_ACCESSKEY_ID }} --access-key-secret ${{ secrets.ALI_ACCESSKEY_SECRET }}
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectPath 'https://codming.com/' --ObjectType Directory --Force true
         aliyun cdn PushObjectCache --region cn-hangzhou --ObjectPath 'https://codming.com/\nhttps://codming.com/sitemap.xml' --L2Preload true
