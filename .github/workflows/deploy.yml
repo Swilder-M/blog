@@ -26,11 +26,14 @@ jobs:
         hugo -d public --minify
 
     - name: upload oss
+      env:
+        OSS_ACCESS_KEY_ID: ${{ secrets.ALI_ACCESSKEY_ID }}
+        OSS_ACCESS_KEY_SECRET: ${{ secrets.ALI_ACCESSKEY_SECRET }}
+        OSS_ENDPOINT: oss-accelerate.aliyuncs.com
       run: |
         curl -s -o ossutil-linux-amd64.zip https://gosspublic.alicdn.com/ossutil/v2/2.1.0/ossutil-2.1.0-linux-amd64.zip
         unzip ossutil-linux-amd64.zip && mv ossutil-*-linux-amd64 ossutil-linux-amd64
         chmod 755 ./ossutil-linux-amd64/ossutil
-        ./ossutil-linux-amd64/ossutil config -e https://oss-accelerate.aliyuncs.com -i ${{ secrets.ALI_ACCESSKEY_ID }} -k ${{ secrets.ALI_ACCESSKEY_SECRET }}
         ./ossutil-linux-amd64/ossutil rm -r -f oss://codming-com-blog/
         ./ossutil-linux-amd64/ossutil cp -r public/ oss://codming-com-blog/
 
