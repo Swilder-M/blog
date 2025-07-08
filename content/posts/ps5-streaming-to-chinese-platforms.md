@@ -87,4 +87,4 @@ sudo docker run -d -it --name pstream -p 8080:8080 -p 1935:1935 -v /opt/pstream/
 B站最新规则限制只有 5000 粉以上的 Up 主才可以使用第三方推流，但我们可以利用插件 [B站推流码获取工具](https://greasyfork.org/zh-CN/scripts/536798-b%E7%AB%99%E6%8E%A8%E6%B5%81%E7%A0%81%E8%8E%B7%E5%8F%96%E5%B7%A5%E5%85%B7) 获取推流码。
 
 最后来一张自动推流到 Bilibili 的截图：
-![自动 push 到 Bilibili](https://static.codming.com/img/20250703221219057.png)
+![](https://static.codming.com/img/20250703221219057.png)

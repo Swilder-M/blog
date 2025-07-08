@@ -4,6 +4,7 @@
 <a data-fancybox="gallery" href="{{ .Destination | safeURL }}">
 <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} title="{{ . }}"{{ end }} />
 </a>
+{{ if .Text }}<div class="image-caption">{{ .Text }}</div>{{ end }}
 </div>
 
 {{ end }}
