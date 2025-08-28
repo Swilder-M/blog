@@ -16,16 +16,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: install hugo
+    - name: Install Hugo
       uses: peaceiris/actions-hugo@v2
       with:
         hugo-version: '0.114.0'
 
-    - name: build web
+    - name: Build Hugo site
       run: |
         hugo -d public --minify
 
-    - name: upload oss
+    - name: Upload OSS
       env:
         OSS_ACCESS_KEY_ID: ${{ secrets.ALI_ACCESSKEY_ID }}
         OSS_ACCESS_KEY_SECRET: ${{ secrets.ALI_ACCESSKEY_SECRET }}
@@ -37,7 +37,7 @@ jobs:
         ossutil rm -r -f oss://codming-com-blog/
         ossutil cp -r public/ oss://codming-com-blog/ -e oss-accelerate.aliyuncs.com
 
-    - name: flush cdn
+    - name: Flush CDN
       run: |
         curl -s -o aliyun-cli-linux-amd64.tgz https://aliyuncli.alicdn.com/aliyun-cli-linux-latest-amd64.tgz
         tar -zxvf aliyun-cli-linux-amd64.tgz
