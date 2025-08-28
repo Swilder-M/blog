@@ -302,3 +302,10 @@ CMCC = socks5, 127.0.0.1, 10808, test-url=http://223.5.5.5
 我是用来绕过中国移动云盘的跨运营商限速：一般在晚上的时候，电信或联通宽带下载中国移动云盘资源的速度很慢，让 `*.cmecloud.cn` 通过转发器连接，速度能提升不少。
 
 另外发现这个用户名和密码不会过期，即使开通的加速服务到期了，也能继续使用这个账号。其他用途感兴趣的可以自己测试。
+
+## 参考资料 & 工具
+- [RFC 1928](https://datatracker.ietf.org/doc/html/rfc1928)
+- [CyberChef](https://gchq.github.io/CyberChef/)
+- [Wireshark](https://www.wireshark.org/)
+- [IDA Pro](https://hex-rays.com/ida-pro)
+- [Surge](https://nssurge.com/)
