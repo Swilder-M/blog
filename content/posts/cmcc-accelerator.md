@@ -191,7 +191,42 @@ Thu Jul 31 10:57:21 2025 | INFO | [SpeedupDriverApi.cpp:244] : Success to copy f
 Thu Jul 31 10:57:21 2025 | INFO | [SpeedupDriverApi.cpp:253] : Success to install driver.
 Thu Jul 31 10:57:21 2025 | INFO | [SpeedupDriverApi.cpp:23] : Begin to start acc 
 Thu Jul 31 10:57:21 2025 | DEBUG | [SocksRedirector.cpp:115] : Begin to init eventhandler, version = 1.0.20240929.1608
-Thu Jul 31 10:57:21 2025 | DEBUG | [SocksRedirector.cpp:100] : Begin to parse json. json: {"game_info":{"game_exe":"chrome.exe,msedge.exe,Zoom.exe,iexplore.exe,firefox.exe,opera.exe,360se.exe,360ChromeX.exe,QQBrowser.exe,SogouExplorer.exe,UCBrowser.exe","region_id":"10000","line_id":"1","optionJson":"only_acc_white:true"},"option":{"default_acc":true,"default_http_acc":true,"limit_speed":10},"server":[{"tag":"default","url":"cmcc://36.134.36.231:10800?udp_port=10800\u0026usr=1234567899876543210\u0026passwd=pAssWord"},{"server_id":1,"tag":"download","url":"cmcc://36.134.36.231:10800?udp_port=10800\u0026usr=1234567899876543210\u0026passwd=pAssWord"},{"server_id":2,"tag":"s5","url":"cmcc://36.134.36.231:10800?udp_port=10800\u0026usr=1234567899876543210\u0026passwd=pAssWord"},{"server_id":3,"tag":"direct","url":"cmcc://36.134.36.231:10800?udp_port=10800\u0026usr=1234567899876543210\u0026passwd=pAssWord"}],"dns_rule":{}}
+Thu Jul 31 10:57:21 2025 | DEBUG | [SocksRedirector.cpp:100] : Begin to parse json. json: 
+{
+     "dns_rule": {},
+     "game_info": {
+          "game_exe": "chrome.exe,msedge.exe,Zoom.exe,iexplore.exe,firefox.exe,opera.exe,360se.exe,360ChromeX.exe,QQBrowser.exe,SogouExplorer.exe,UCBrowser.exe",
+          "line_id": "1",
+          "optionJson": "only_acc_white:true",
+          "region_id": "10000"
+     },
+     "option": {
+          "default_acc": true,
+          "default_http_acc": true,
+          "limit_speed": 10
+     },
+     "server": [
+          {
+               "tag": "default",
+               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
+          },
+          {
+               "server_id": 1,
+               "tag": "download",
+               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
+          },
+          {
+               "server_id": 2,
+               "tag": "s5",
+               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
+          },
+          {
+               "server_id": 3,
+               "tag": "direct",
+               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
+          }
+     ]
+}
 Thu Jul 31 10:57:24 2025 | ERROR | [GameAccConf.cpp:620] : loadGlobalBlack open file failed , err:2
 Thu Jul 31 10:57:24 2025 | INFO | [CmccThread.cpp:8] : Begin to init CMCC ConfHandler thread
 Thu Jul 31 10:57:24 2025 | INFO | [CmccThread.cpp:24] : Success to init CMCC ConfHandler thread
@@ -200,6 +235,7 @@ Thu Jul 31 10:57:24 2025 | DEBUG | [tcpproxy.cpp:424] : TCPProxy::init port=8888
 Thu Jul 31 10:57:24 2025 | DEBUG | [iocp.h:98] : IOCP workerThread = 3776
 Thu Jul 31 10:57:24 2025 | DEBUG | [tcpproxy.cpp:449] : TCPProxy::init IPv4 listen socket initialized
 ```
+
 其中的 `cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord` 就是代理服务器配置：
 - 服务器地址：`36.134.36.231`
 - 服务器端口：`10800`
@@ -258,7 +294,7 @@ URL：`https://aifast.komect.com/portal/education/pc/checkSdkPermission`
 经过测试，收集到的接入点以及认证方式如下：
 | 接入点                | 接入点区域 | 认证方式 | 落地区域                       |          |
 | --------------------- | ---------- | -------- | ------------------------- | -------- |
-| 223.109.209.219:10800 | 上海移动   | 0x80     | 腾讯云上海                   |          |
+| 223.109.209.219:10800 | 江苏移动   | 0x80     | 腾讯云上海                   |          |
 | 36.134.36.231:10800   | 上海移动   | 0x82     | 腾讯云上海 or 腾讯云香港       | 自动分流  |
 | 36.134.129.66:10800   | 北京移动   | 0x80     | 北京移动                     |          |
 | 36.134.129.66:10800   | 北京移动   | 0x82     | 腾讯云上海 or 腾讯云香港       | 自动分流  |
