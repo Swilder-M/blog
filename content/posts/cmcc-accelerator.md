@@ -14,7 +14,7 @@ draft: false
 
 ## SOCKS5 协议的工作流程
 
-SOCKS5 协议建立连接的过程分为三个主要阶段：认证协商、身份验证和连接请求。下面是完整的工作流程：
+SOCKS5 协议建立连接的过程分为三个主要阶段：认证协商、身份验证和连接请求。下面是它的工作流程：
 
 ```
 Client                     SOCKS5 Proxy                Target Server
@@ -209,21 +209,6 @@ Thu Jul 31 10:57:21 2025 | DEBUG | [SocksRedirector.cpp:100] : Begin to parse js
           {
                "tag": "default",
                "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
-          },
-          {
-               "server_id": 1,
-               "tag": "download",
-               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
-          },
-          {
-               "server_id": 2,
-               "tag": "s5",
-               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
-          },
-          {
-               "server_id": 3,
-               "tag": "direct",
-               "url": "cmcc://36.134.36.231:10800?udp_port=10800&usr=1234567899876543210&passwd=pAssWord"
           }
      ]
 }
@@ -242,8 +227,7 @@ Thu Jul 31 10:57:24 2025 | DEBUG | [tcpproxy.cpp:449] : TCPProxy::init IPv4 list
 - 用户名：`1234567899876543210`
 - 密码：`pAssWord`
 
-也可以通过抓包 iOS 端获取：
-URL：`https://aifast.komect.com/portal/education/pc/checkSdkPermission`
+也可以抓包获取：`https://aifast.komect.com/portal/education/pc/checkSdkPermission`
 ```json
 {
      "data": {
