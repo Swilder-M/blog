@@ -323,6 +323,15 @@ CMCC = socks5, 127.0.0.1, 10808, test-url=http://223.5.5.5
 
 另外发现这个用户名和密码不会过期，即使开通的加速服务到期了，也能继续使用这个账号。其他用途感兴趣的可以自己测试。
 
+### 2025/09/09 更新
+开通的加速服务这个月已经过期，但最新测试仍然可以使用，看来这个账号密码应该是长期有效的。
+
+<div class="fancybox">
+<a data-fancybox="gallery" href="https://static.codming.com/img/20250909111540612.png">
+<img src="https://static.codming.com/img/20250909111540612.png" style="zoom:50%;" />
+</a>
+</div>
+
 ## 参考资料 & 工具
 - [RFC 1928](https://datatracker.ietf.org/doc/html/rfc1928)
 - [CyberChef](https://gchq.github.io/CyberChef/)
