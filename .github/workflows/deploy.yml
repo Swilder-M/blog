@@ -35,7 +35,7 @@ jobs:
         unzip ossutil-linux-amd64.zip && mv ossutil-*-linux-amd64 ossutil-linux-amd64
         chmod 755 ./ossutil-linux-amd64/ossutil && cp ./ossutil-linux-amd64/ossutil /usr/local/bin/
         ossutil rm -r -f oss://codming-com-blog/
-        ossutil cp -r public/ oss://codming-com-blog/ -j 20 -e oss-accelerate.aliyuncs.com
+        ossutil cp -r -f public/ oss://codming-com-blog/ -j 20 -e oss-accelerate.aliyuncs.com
 
     - name: Flush CDN
       run: |
