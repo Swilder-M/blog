@@ -12,7 +12,7 @@ draft: false
 
 先看看设备的基本规格，详细的拆机测评可以看 [Acwifi](https://www.acwifi.net/17162.html) 的文章：
 
-- **型号**：FiberHome LG6121F
+- **型号**：FiberHome LG6121F（烽火 5G CPE 一代）
 - **SoC**：MediaTek MT6890 (T750)，ARMv8 Cortex-A55 四核
 - **内存**：1GB
 - **存储**：NAND Flash，UBI 分区
