@@ -145,6 +145,8 @@ ssh root@192.168.8.1
 # 密码: F1ber@dm!n
 ```
 
+![短信发送注入](https://static.codming.com/img/20260413174656281.png)
+
 如果通过 API 直接调用，注入方式更灵活，`content` 字段可以用双引号闭合：
 
 ```javascript
