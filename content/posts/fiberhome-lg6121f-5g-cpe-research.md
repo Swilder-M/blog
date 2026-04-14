@@ -110,7 +110,7 @@ resp = decrypt(POST('/api/tmp/FHAPIS', encrypt(json.dumps({
 1. **Host key 无法生成**：根文件系统是只读的 squashfs，dropbear 默认的 key 目录 `/etc/dropbear/` 不可写，需要手动生成 key 到 `/tmp`
 2. **默认密码无法登录**：`/etc/shadow` 中 root 密码的 hash 是 SHA-512（`$6$`），但设备的 musl libc `crypt()` 只支持 DES 和 MD5（`$1$`），导致 SSH 登录时密码校验永远失败。需要生成一个 MD5 hash 的 shadow 文件并 bind mount 覆盖
 
-我把这些步骤整理成了一个脚本，可以一键进行这些操作：
+我把这些步骤整理成了一个脚本，一键进行这些操作：
 
 ```shell
 #!/bin/sh
@@ -143,7 +143,7 @@ iptables -C INPUT -p tcp --dport 22 -j ACCEPT 2>/dev/null || \
     iptables -I INPUT 1 -p tcp --dport 22 -j ACCEPT
 ```
 
-你也可以自己写一个类似的脚本上传到 CPE 可以访问的地方，后面各种方法拿到 shell 后都可以执行这个脚本来开启 SSH 服务：
+可以用我写好的，也可以自己写一个类似的脚本上传到 CPE 可以访问的地方，后面各种方法拿到 shell 后都可以执行这个脚本来开启 SSH 服务：
 
 ```shell
 # 下载脚本到持久分区
@@ -153,7 +153,7 @@ curl -sSLk -o /data/ssh_enable.sh static.codming.com/tmp/ssh_enable.sh
 sh /data/ssh_enable.sh
 ```
 
-完成后即可登录：
+完成后登录：
 
 ```shell
 ssh root@192.168.8.1
@@ -348,20 +348,20 @@ POST /api/tmp/FHNCAPIS  ajaxmethod=set_value_by_xmlnode
 
 第一反应是找一个可写的地方塞个启动脚本，但系统性排查后发现，几乎全部行不通：
 
-| 方式 | 结果 | 原因 |
-|------|------|------|
-| SshEnable 参数 | ❌ | 死参数，无进程消费 |
-| process_start_list | ❌ | 路径硬编码为 `/fhrom/fhconf/`，只读 |
-| nginx.conf 注入 | ❌ | 每次启动被 start_webserver.sh 覆盖 |
-| crond 定时任务 | ❌ | crontab 目录为空且不可写入 |
-| init 脚本 | ❌ | 全在 squashfs 只读分区 |
-| hotplug 脚本 | ❌ | 依赖项都在只读目录 |
-| rc.local（无 overlay） | ❌ | `/etc` 只读，无法写入 |
-| uci-defaults | ❌ | 目录在 squashfs，无法添加脚本 |
-| UCI triggers | ❌ | 只在 `uci commit` 时触发，启动时不触发 |
-| PATH 劫持 | ❌ | PATH 中所有目录都在 squashfs |
-| preinit 脚本链 | ❌ | 16 个脚本全在只读分区 |
-| 定时重启功能注入 | ❌ | 纯整数比较，无法注入 |
+| 方式 | 原因 |
+|------|------|
+| SshEnable 参数 | 死参数，无进程消费 |
+| process_start_list | 路径硬编码为 `/fhrom/fhconf/`，只读 |
+| nginx.conf 注入 | 每次启动被 start_webserver.sh 覆盖 |
+| crond 定时任务 | crontab 目录为空且不可写入 |
+| init 脚本 | 全在 squashfs 只读分区 |
+| hotplug 脚本 | 依赖项都在只读目录 |
+| rc.local（无 overlay） | `/etc` 只读，无法写入 |
+| uci-defaults | 目录在 squashfs，无法添加脚本 |
+| UCI triggers | 只在 `uci commit` 时触发，启动时不触发 |
+| PATH 劫持 | PATH 中所有目录都在 squashfs |
+| preinit 脚本链 | 16 个脚本全在只读分区 |
+| 定时重启功能注入 | 纯整数比较，无法注入 |
 
 核心问题在于：根文件系统是 squashfs 只读的，几乎所有启动脚本和配置路径都在只读分区上。唯一的出路是激活 OpenWrt 的 overlayfs 机制，让 `/etc` 变成可写的。但这需要修改固件，先来深入了解一下系统结构。
 
@@ -642,7 +642,7 @@ reboot
 
 ### 服务自启动
 
-Overlay 激活后 `/etc` 变成可写的了，现在可以配置 SSH 自启动了。首次启动修改后的固件时，SSH 还没有自启动，需要先用前面的方法临时开启，脚本已经在 `/data/ssh_enable.sh`（重启不丢失），随便用哪种方式执行一次就行：
+Overlay 激活后 `/etc` 变成可写，现在可以配置 SSH 自启动了。首次启动修改后的固件时，SSH 还没有自启动，需要先用前面的方法临时开启，脚本已经在 `/data/ssh_enable.sh`（重启不丢失），随便用哪种方式执行一次就行：
 
 ```shell
 # 例如通过 AT 注入
@@ -774,7 +774,7 @@ PPE 物理上位于 MAC 和 CPU 之间，只能加速从物理接口进入的流
 
 ### 优化尝试
 
-前后尝试了 22 种优化方案，全部无效：
+前后尝试了多种优化方案，全部无效：
 
 - TUN 设备、iptables REDIRECT、TCP 缓冲区调优、Go runtime GOMAXPROCS 调整
 - fq_codel/SQM QoS、veth + network namespace、GSO/SG offload
