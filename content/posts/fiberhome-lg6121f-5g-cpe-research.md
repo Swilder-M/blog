@@ -677,6 +677,8 @@ EOF
 
 ### 启用 LuCI Web 界面
 
+![LuCI Web 界面](https://static.codming.com/img/20260413174656285.png)
+
 设备固件基于 OpenWrt 19.07.7，LuCI 框架及依赖已预装在 squashfs 中，但烽火移除了 uhttpd 二进制。补回 uhttpd 后可以在独立端口运行 LuCI，和原厂 Web 界面并行使用。
 
 | 组件 | 状态 |
