@@ -1,10 +1,16 @@
-{{if .Page.Site.Params.fancybox }}
-
+{{ if not (.Page.Scratch.Get "firstImageDone") }}
+{{ .Page.Scratch.Set "firstImageDone" true }}
+<div class="fancybox">
+<a data-fancybox="gallery" href="{{ .Destination | safeURL }}">
+<img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} title="{{ . }}"{{ end }} fetchpriority="high" />
+</a>
+{{ if .Text }}<div class="image-caption">{{ .Text }}</div>{{ end }}
+</div>
+{{ else }}
 <div class="fancybox">
 <a data-fancybox="gallery" href="{{ .Destination | safeURL }}">
 <img src="{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} title="{{ . }}"{{ end }} loading="lazy" />
 </a>
 {{ if .Text }}<div class="image-caption">{{ .Text }}</div>{{ end }}
 </div>
-
 {{ end }}

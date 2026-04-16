@@ -41,9 +41,6 @@
     <!-- non-critical css (deferred) -->
     <link rel="stylesheet" href="{{ "css/custom-remixicon.css" | absURL }}" media="print" onload="this.media='all'" />
     <link rel="stylesheet" href="{{ "css/highlight.css" | absURL }}" media="print" onload="this.media='all'" />
-    {{ if .Site.Params.fancybox }}
-    <link rel="stylesheet" href="{{ "css/fancybox.min.css" | absURL }}" media="print" onload="this.media='all'" />
-    {{ end }}
 
     <!-- custom css (deferred) -->
     {{ range .Site.Params.customCSS }}
@@ -54,9 +51,6 @@
     <noscript>
         <link rel="stylesheet" href="{{ "css/custom-remixicon.css" | absURL }}" />
         <link rel="stylesheet" href="{{ "css/highlight.css" | absURL }}" />
-        {{ if .Site.Params.fancybox }}
-        <link rel="stylesheet" href="{{ "css/fancybox.min.css" | absURL }}" />
-        {{ end }}
         {{ range .Site.Params.customCSS }}
         <link rel="stylesheet" href="{{ "css/" | absURL }}{{ . }}" />
         {{ end }}
