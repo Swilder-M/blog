@@ -13,6 +13,59 @@
   -webkit-transform: none !important;
 }
 
+/* 标题链接宽度自适应 */
+.header .site_title_container .site_title a {
+  width: auto;
+}
+
+/* 行内代码允许换行 */
+.markdown code {
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* 表格横向滚动 */
+.markdown table {
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* 代码块和表格：滚动条默认隐藏，hover 时显示 */
+.markdown pre::-webkit-scrollbar-thumb,
+.markdown table::-webkit-scrollbar-thumb {
+  background-color: transparent;
+}
+
+.markdown pre:hover::-webkit-scrollbar-thumb,
+.markdown table:hover::-webkit-scrollbar-thumb {
+  background-color: #cccccc;
+}
+
+.markdown pre:hover::-webkit-scrollbar-thumb:active,
+.markdown table:hover::-webkit-scrollbar-thumb:active {
+  background-color: #999999;
+}
+
+.markdown table::-webkit-scrollbar {
+  height: 10px;
+}
+
+.markdown table::-webkit-scrollbar-button {
+  display: none;
+}
+
+.markdown table::-webkit-scrollbar-track {
+  background: white;
+}
+
+.markdown table::-webkit-scrollbar-thumb {
+  min-height: 1rem;
+  background-clip: padding-box;
+  border: 3px solid #fdfdfd;
+  border-radius: 5px;
+}
+
 /* 图片描述样式 */
 .image-caption {
   font-size: 12px;
