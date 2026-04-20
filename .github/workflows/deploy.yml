@@ -44,5 +44,8 @@ jobs:
         chmod 755 aliyun && cp aliyun /usr/local/bin/
         aliyun configure set --profile default --mode AK --region cn-hangzhou --access-key-id ${{ secrets.ALI_ACCESSKEY_ID }} --access-key-secret ${{ secrets.ALI_ACCESSKEY_SECRET }}
         aliyun cdn RefreshObjectCaches --region cn-hangzhou --ObjectPath 'https://codming.com/' --ObjectType Directory --Force true
-        aliyun cdn PushObjectCache --region cn-hangzhou --ObjectPath 'https://codming.com/' --L2Preload true
-        aliyun cdn PushObjectCache --region cn-hangzhou --ObjectPath 'https://codming.com/sitemap.xml' --L2Preload true
+        PRELOAD=$'https://codming.com/\nhttps://codming.com/posts/\nhttps://codming.com/index.xml\nhttps://codming.com/sitemap.xml\n'
+        PRELOAD+=$(find public/posts -mindepth 1 -maxdepth 1 -type d -printf 'https://codming.com/posts/%f/\n')
+        echo "Preload URLs:"
+        echo "$PRELOAD"
+        aliyun cdn PushObjectCache --region cn-hangzhou --ObjectPath "$PRELOAD" --L2Preload true

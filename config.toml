@@ -46,7 +46,6 @@ pygmentscodefencesguesssyntax = true
   description = "Enjoy Life, Enjoy Coding."                       # site's description           # 网站描述
   enableSummary = true                                            # display the article summary  # 是否显示文章摘要
   mainSections = ["posts","post"]
-  fancybox = true
   customCSS = ["custom.css"]                          # 禁用页面切换动画效果的CSS
 
 [social]
